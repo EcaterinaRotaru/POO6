@@ -1,0 +1,66 @@
+#include <iostream>
+#include <vector>
+
+// Clasa abstractă de bază Worker
+class Worker {
+public:
+    virtual double calculareSalariu() const = 0;
+    virtual ~Worker() {}
+};
+
+// Clasa derivată StateWorker
+class StateWorker : public Worker {
+public:
+    double calculareSalariu() const override {
+        // Implementare specifică pentru StateWorker
+        return 5000.0;  // Exemplu de calcul
+    }
+};
+
+// Clasa derivată HourlyWorker
+class HourlyWorker : public Worker {
+public:
+    double calculareSalariu() const override {
+        // Implementare specifică pentru HourlyWorker
+        return 20.0 * 8.0;  // Exemplu de calcul pentru 8 ore lucrate la 20 $/oră
+    }
+};
+
+// Clasa derivată CommissionWorker
+class CommissionWorker : public Worker {
+public:
+    double calculareSalariu() const override {
+        // Implementare specifică pentru CommissionWorker
+        return 1000.0 + 0.1 * vanzari;  // Exemplu de calcul, 1000$ + 10% din vânzări
+    }
+
+    void setVanzari(double value) {
+        vanzari = value;
+    }
+
+private:
+    double vanzari;
+};
+
+int main() {
+    // Crearea obiectelor
+    StateWorker stateWorker;
+    HourlyWorker hourlyWorker;
+    CommissionWorker commissionWorker;
+
+    // Setarea vânzărilor pentru CommissionWorker
+    commissionWorker.setVanzari(5000.0);
+
+    // Crearea unui vector de pointeri la clasa abstractă Worker
+    std::vector<Worker*> workers;
+    workers.push_back(&stateWorker);
+    workers.push_back(&hourlyWorker);
+    workers.push_back(&commissionWorker);
+
+    // Iterarea prin vector și apelarea funcției calculareSalariu
+    for (const auto& worker : workers) {
+        std::cout << "Salariul: " << worker->calculareSalariu() << std::endl;
+    }
+
+    return 0;
+}
